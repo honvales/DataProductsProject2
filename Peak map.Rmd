@@ -1,0 +1,34 @@
+---
+title: "Peaks I have climbed"
+author: "Honorio Valdes"
+date: "8/4/2020"
+output: html_document
+---
+
+## Background
+
+The following map shows a list of peaks that I have climbed. All data was sourced from Peakbagger and can be found in the following link <https://www.peakbagger.com/climber/PeakListC.aspx?cid=17014>. Due to data use rules, I obtained all data manually.
+
+## Data acquisition
+The following code was used for data acquisition.
+
+```{r data}
+set.seed(2020-08-04)
+data <- read.csv('honorio_peak_data.csv')
+```
+
+## Map creation
+
+The following code was used to create the map. Rather than using the conventional OpenStreetMap, OpenTopoMap was used in order to better show the peaks.
+```{r map}
+library(leaflet)
+library(leaflet.providers)
+df <- data.frame(latitude=data[,1], longitude=data[,2])
+
+data %>% 
+  leaflet() %>% 
+  addTiles() %>% 
+  addProviderTiles(providers$OpenTopoMap, group='Topo') %>%
+  addMarkers(popup=data[,3],clusterOptions=markerClusterOptions())
+
+```
